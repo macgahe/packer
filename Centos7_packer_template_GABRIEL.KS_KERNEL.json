@@ -1,0 +1,63 @@
+{
+  "_comment": "This si a centos7-x64 Machine for VmWare ESXi 6.0",
+  "variables": {
+    "nameVm": "centos-7.1-vmware_Packer",
+    "vmx_file": "VMMinsize.vmx",
+    "ks_file": "simple-ks-integrado-CIS-BitbyBit.ks",
+    "ks_server": "192.168.1.150",
+    "ks_path": "centos7.1511_x64/ks/",
+    "vmware_host": "192.168.1.250",
+    "vmware_user": "root",
+    "http_dir": "/packer",
+    "vmlinuz_file": "centos7.1503_x64/images/pxeboot/vmlinuz",
+    "initrd_file": "centos7.1503_x64/images/pxeboot/initrd.img",
+    "iso_image":"http://192.168.1.150/isos/CentOS-7-x86_64-NetInstall-1503.iso",
+    "iso_md5":"111379a06402e1e445c6aeee9401d031",
+    "datastore":"datastore1",
+    "esx_host":"192.168.1.250",
+    "esx_user":"packer",
+    "esx_user_key":"/Users/gabo/.ssh/id_rsa",
+    "os_type":"centos-64"
+  },
+  "builders": [
+    {
+      "type":"vmware-iso",
+      "iso_url":"{{user `iso_image`}}",
+      "iso_checksum":"{{user `iso_md5`}}",
+      "iso_checksum_type":"md5",
+      "http_directory": "{{user `http_dir`}}",
+      "output_directory":"{{user `vms_dir_path`}}",
+      "remote_datastore":"{{user `datastore`}}",
+      "remote_host":"{{user `esx_host`}}",
+      "remote_password":"{{user `esx_user_pwd`}}",
+      "remote_private_key_file":"{{user `esx_user_key`}}",
+      "remote_username":"{{user `esx_user`}}",
+      "tools_upload_flavor":"linux",
+      "vm_name":"{{user `nameVm`}}",
+      "vmdk_name":"gabriel",
+      "disk_type_id":"0",
+      "keep_registered":"true",
+      "version":"11",
+      "boot_command": [
+        "<tab> text {{user `vmlinuz_file`}} initrd={{user `initrd_file`}} inst.ks=http://{{user `ks_server`}}/{{user `ks_path`}}/{{user `ks_file`}}<enter><wait>"
+      ],
+      "ssh_username": "root",
+      "http_directory": "http",
+      "shutdown_command": "/usr/sbin/shutdown -r now ",
+      "tools_upload_path": "/tmp/vmware_tools_{{.Flavor}}.iso",
+      "disk_size":"1000",
+      "guest_os_type":"{{user `os_type`}}",
+      "remote_type":"esx5",
+      "vnc_bind_address":"0.0.0.0",
+      "vnc_disable_password":"true",
+      "vnc_port_min":"5900",
+      "vnc_port_min":"5911",
+
+      "vmx_data": {
+        "memsize": "1024",
+        "numvcpus": "1",
+        "cpuid.coresPerSocket": "1"
+      }
+    }
+  ]
+}

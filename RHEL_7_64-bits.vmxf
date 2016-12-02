@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<Foundry>
+<VM>
+<VMId type="string">52 82 df b3 64 e0 02 de-63 bb 07 4e 12 96 3a a2</VMId>
+<ClientMetaData>
+<clientMetaDataAttributes/>
+<HistoryEventList/></ClientMetaData>
+<vmxPathName type="string">RHEL_7_64-bits.vmx</vmxPathName></VM></Foundry>
